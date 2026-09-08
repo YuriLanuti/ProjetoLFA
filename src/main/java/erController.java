@@ -20,28 +20,28 @@ public class erController {
 
         String expressao = campoExpressao.getText().trim();
         String textoPalavras = campoPalavras.getText();
+        String resultadoTexto;
 
         if (!expressao.isEmpty()) { // Se tiver algo escrito
 
-            if (caracteresPermitidos(expressao)) {
+            if (caracteresPermitidos(expressao)) { // Verifica se existe algum caractere fora dos utilizados
 
-                if (validaEstrutura(expressao)) {
+                if (validaEstrutura(expressao)) { // Verifica se pertence corretamente a expressão
 
-                    testarPalavras(expressao, textoPalavras);
+                    resultadoTexto = testarPalavras(expressao, textoPalavras);
+                    resultado.setText(resultadoTexto); // Exibe resultado
 
-                } else {
-                    resultado.setText("ERRO: Estrutura da expressão inválida.");
                 }
+                else
+                    resultado.setText("A Estrutura da expressão é inválida.");
 
-            } else {
-                resultado.setText(
-                        "ERRO: A expressão possui caracteres não permitidos."
-                );
             }
-
-        } else {
-            resultado.setText("Digite uma expressão regular.");
+            else
+                resultado.setText("A expressão possui caracteres não permitidos.");
         }
+        else
+            resultado.setText("Digite uma expressão regular.");
+
     }
 
     private boolean caracteresPermitidos(String expressao) {
@@ -49,10 +49,10 @@ public class erController {
         boolean valido = true;
         char caractere;
 
-        for (int i = 0; i < expressao.length(); i++) {
+        for (int i = 0; i < expressao.length() && valido; i++) {
 
             caractere = expressao.charAt(i);
-            if (!Character.isLetterOrDigit(caractere) && caractere != '*' && caractere != '+' && caractere != '|' && caractere != '.' && caractere != '(' && caractere != ')')
+            if (!((caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9')) && caractere != '*' && caractere != '+' && caractere != '|' && caractere != '.' && caractere != '(' && caractere != ')')
                 valido = false;
 
         }
@@ -63,71 +63,93 @@ public class erController {
     private boolean validaEstrutura(String expressao) {
 
         boolean valido = true;
-        boolean esperaOperando = true;
-        boolean operando;
+        boolean operando, ultimoFoiOperando = false;
+        int quantParenteses = 0;
         char caractere;
-        int parenteses = 0;
 
-        for (int i = 0; i < expressao.length(); i++) {
+        for (int i = 0; i < expressao.length() && valido; i++) {
 
             caractere = expressao.charAt(i);
+            operando = (caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9'); // é letra ou número
 
-            // É letra ou número
-            operando = (caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9');
+            if (operando) {
 
-            if (operando) { // Se for operando
-
-                if (!esperaOperando)
+                if (ultimoFoiOperando)
                     valido = false;
 
-                esperaOperando = false;
+                ultimoFoiOperando = true;
             }
-            else if (caractere == '(') { // Abre parêntese
+            else if (caractere == '(') {
 
-                if (!esperaOperando)
+                if (ultimoFoiOperando)
                     valido = false;
 
-                parenteses++;
-                esperaOperando = true;
+                quantParenteses++;
+                ultimoFoiOperando = false;
             }
-            else if (caractere == ')') {  // Fecha parêntese
+            else if (caractere == ')') {
 
-                if (esperaOperando)
+                if (!ultimoFoiOperando)
                     valido = false;
 
-                parenteses--;
-                if (parenteses < 0)
+                quantParenteses--;
+                if (quantParenteses < 0)
                     valido = false;
 
-                esperaOperando = false;
+                ultimoFoiOperando = true;
             }
-            else if (caractere == '+' || caractere == '|' || caractere == '.') { // União ou concatenação
+            else if (caractere == '+' || caractere == '|' || caractere == '.') {
 
-                if (esperaOperando)
+                if (!ultimoFoiOperando)
                     valido = false;
 
-                esperaOperando = true;
+                ultimoFoiOperando = false;
             }
-            else if (caractere == '*') { // Se tiver '*'  (Fecho de Klene)
+            else if (caractere == '*') {
 
-                if (esperaOperando)
+                if (!ultimoFoiOperando)
                     valido = false;
-
-                esperaOperando = false;
             }
         }
 
-        // A expressão não pode terminar esperando um operando
-        if (esperaOperando) {
+        if (!ultimoFoiOperando || quantParenteses != 0)
             valido = false;
-        }
-
-        // Os parênteses precisam estar equilibrados
-        if (parenteses != 0) {
-            valido = false;
-        }
 
         return valido;
+    }
+
+    private String testarPalavras(String expressao, String textoPalavras) {
+
+        String palavra = "";
+        String resultadoTexto = "";
+        char caractere;
+
+        expressao = expressao.replace(".", ""); // Retira os pontos
+        expressao = expressao.replace("+", "|"); // Modifica os '+' para '|'
+
+        textoPalavras += "\n"; // Acrescenta "\n" no final para critério de parada
+
+        for (int i = 0; i < textoPalavras.length(); i++) {
+
+            caractere = textoPalavras.charAt(i);
+
+            if (caractere != '\n') // Se for caractere
+                palavra += caractere;
+            else {
+                
+                if (!palavra.isEmpty()) { // Se palavra não estiver vazia
+
+                    if (palavra.matches(expressao))
+                        resultadoTexto += palavra + "\t\t-\t\tACEITA\n";
+                    else
+                        resultadoTexto += palavra + "\t\t-\t\tREJEITA\n";
+                }
+
+                palavra = "";
+            }
+        }
+
+        return resultadoTexto;
     }
 
     /*
