@@ -23,15 +23,10 @@ public class HelloController {
 
     public void abrirER(ActionEvent actionEvent) {
         try {
-
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    HelloApplication.class.getResource("er-view.fxml")
-            );
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("er-view.fxml"));
 
             Scene scene = new Scene(fxmlLoader.load());
-
             Stage stage = new Stage();
-
             stage.setTitle("Expressão Regular");
             stage.setScene(scene);
             stage.show();
