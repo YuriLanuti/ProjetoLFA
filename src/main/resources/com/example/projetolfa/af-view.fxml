@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.projetolfa.afController">
+    <top>
+        <Label text="AUTÔMATO FINITO" style="-fx-font-size: 24px; -fx-font-weight: bold;" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets top="20.0" bottom="10.0"/>
+            </BorderPane.margin>
+        </Label>
+    </top>
+    <left>
+        <VBox alignment="TOP_CENTER" prefWidth="100.0" spacing="20.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #cccccc;">
+            <padding>
+                <Insets top="20.0"/>
+            </padding>
+            <Label text="Arraste o&#10;estado" style="-fx-font-size: 11px; -fx-text-alignment: center;" textAlignment="CENTER"/>
+            <Circle fx:id="iconeNovoEstado" fill="WHITE" radius="30.0" stroke="BLACK" strokeType="INSIDE">
+                <cursor>
+                    <Cursor fx:constant="OPEN_HAND"/>
+                </cursor>
+            </Circle>
+            <Button text="LIMPAR" onAction="#limparDiagrama"/>
+        </VBox>
+    </left>
+    <center>
+        <Pane fx:id="canvasDiagrama" style="-fx-background-color: #fafafa;">
+            <BorderPane.margin>
+                <Insets bottom="30.0" left="20.0" right="40.0" top="10.0"/>
+            </BorderPane.margin>
+        </Pane>
+    </center>
+</BorderPane>
