@@ -139,10 +139,22 @@ public class erController {
                 
                 if (!palavra.isEmpty()) { // Se palavra não estiver vazia
 
-                    if (palavra.matches(expressao))
-                        resultadoTexto += palavra + "\t\t-\t\tACEITA\n";
-                    else
-                        resultadoTexto += palavra + "\t\t-\t\tREJEITA\n";
+                    if (palavra.equals("#")) { // '#' simboliza o caractere vazio 'ε'
+
+                        palavra = "";
+                        if (palavra.matches(expressao))
+                            resultadoTexto += "ε\t\t-\t\tACEITA\n";
+                        else
+                            resultadoTexto += "ε\t\t-\t\tREJEITA\n";
+
+                    }
+                    else {
+
+                        if (palavra.matches(expressao))
+                            resultadoTexto += palavra + "\t\t-\t\tACEITA\n";
+                        else
+                            resultadoTexto += palavra + "\t\t-\t\tREJEITA\n";
+                    }
                 }
 
                 palavra = "";
