@@ -37,7 +37,18 @@ public class HelloController {
     }
 
     public void abrirDT(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("af-view.fxml"));
 
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setTitle("Autômato Finito");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void abrirGR(ActionEvent actionEvent) {
