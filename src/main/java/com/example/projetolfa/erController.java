@@ -52,7 +52,7 @@ public class erController {
         for (int i = 0; i < expressao.length() && valido; i++) {
 
             caractere = expressao.charAt(i);
-            if (!((caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9')) && caractere != '*' && caractere != '+' && caractere != '|' && caractere != '.' && caractere != '(' && caractere != ')')
+            if (!((caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9')) && caractere != '*' && caractere != '+' && caractere != '|' && caractere != '.' && caractere != '(' && caractere != ')' && caractere != Transicao.EPSILON.charAt(0))
                 valido = false;
 
         }
@@ -70,7 +70,7 @@ public class erController {
         for (int i = 0; i < expressao.length() && valido; i++) {
 
             caractere = expressao.charAt(i);
-            operando = (caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9'); // é letra ou número
+            operando = (caractere >= 'a' && caractere <= 'z') || (caractere >= 'A' && caractere <= 'Z') || (caractere >= '0' && caractere <= '9') || caractere == Transicao.EPSILON.charAt(0); // é letra, número ou a palavra vazia
 
             if (operando) {
 
@@ -126,6 +126,7 @@ public class erController {
 
         expressao = expressao.replace(".", ""); // Retira os pontos
         expressao = expressao.replace("+", "|"); // Modifica os '+' para '|'
+        expressao = expressao.replace(Transicao.EPSILON, ""); // "&" representa a palavra vazia dentro da expressão
 
         textoPalavras += "\n"; // Acrescenta "\n" no final para critério de parada
 
@@ -139,7 +140,10 @@ public class erController {
                 
                 if (!palavra.isEmpty()) { // Se palavra não estiver vazia
 
-                    if (palavra.matches(expressao))
+                    // "&" representa a palavra vazia, seguindo o mesmo padrão usado nas transições do AF
+                    String palavraTeste = palavra.equals(Transicao.EPSILON) ? "" : palavra;
+
+                    if (palavraTeste.matches(expressao))
                         resultadoTexto += palavra + "\t\t-\t\tACEITA\n";
                     else
                         resultadoTexto += palavra + "\t\t-\t\tREJEITA\n";
