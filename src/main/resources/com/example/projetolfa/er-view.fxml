@@ -16,11 +16,11 @@
            style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
     <VBox spacing="8.0" prefWidth="650.0">
         <Label text="Expressão:"/>
-        <TextField fx:id="campoExpressao" promptText="Ex: (a|b).(a|b).(a|b)"/>
+        <TextField fx:id="campoExpressao" promptText="Ex: (a|b).(a|b).(a|b) — use &quot;&amp;&quot; para a palavra vazia"/>
     </VBox>
     <VBox spacing="8.0" prefWidth="650.0">
         <Label text="Palavras para testar:" style="-fx-font-size: 14px;"/>
-        <TextArea fx:id="campoPalavras" prefRowCount="5" wrapText="true" promptText="Digite uma palavra por linha"/>
+        <TextArea fx:id="campoPalavras" prefRowCount="5" wrapText="true" promptText="Digite uma palavra por linha (use &quot;&amp;&quot; para a palavra vazia)"/>
     </VBox>
     <HBox alignment="CENTER" spacing="15.0">
         <Button text="TESTAR" onAction="#testarExpressao"/>
